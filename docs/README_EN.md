@@ -1,4 +1,4 @@
-[English README](./README_EN.md) /[Telegram](https://t.me/Eschericia0)/[QQ](https://qm.qq.com/q/dCn4enLQly)
+[Chinese README](../README.md) /[Telegram](https://t.me/Eschericia0)/[QQ](https://qm.qq.com/q/dCn4enLQly)
 
 # LINE Stickers and Emoji Downloader
 
@@ -30,10 +30,11 @@ pip install BeautifulSoup4 zipfile shutil
 
 ## How to use
 
-| File name   | Function                                   | How to use                                                                                   |
-|---------|----------------------------------------|-------------------------------------------------------------------------------------------|
-| `dl.py` | This file only has the function of downloading a single sticker pack            | Please copy the sticker pack URL `url` you want to download, and you can run `python dl.py <url>` in the same directory to download.            |
-| `bd.py` | Download a single sticker or batch download all stickers from a creator | Please copy the sticker pack URL or creator URL you want to download, and enter `python bd.py` in the same directory and run it, paste the URL after the prompt. |
+| File name | Function                                                                | How to use                                                       |
+|-----------|-------------------------------------------------------------------------|------------------------------------------------------------------|
+| `dl.py`   | This file only has the function of downloading a single sticker pack    | Please copy the sticker pack URL `url` you want to download, and you can run `python dl.py <url>` in the same directory to download.                                  |
+| `bd.py`   | Download a single sticker or batch download all stickers from a creator | Please copy the sticker pack URL or creator URL you want to download, and enter `python bd.py` in the same directory and run it, paste the URL after the prompt. |
+| `bdp.py`  | Similar to `bd.py`                                                      | Paste the URLs of the texture packs you want to download and the author's URLs into `bdp.txt` in the same directory as the script, separated by carriage returns. See [here](./docs/bdp.txt) for an example. Then run `python bd.py` and the script will automatically download the textures in bulk.                                     |
 
 ## Errors and solutions
 
