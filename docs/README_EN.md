@@ -15,7 +15,8 @@ This project is prohibited for illegal use and sale. **If you like these sticker
     - [1. Unable to get the sticker pack name](#1-unable-to-get-the-sticker-pack-name)
     - [2. Unable to download](#2-unable-to-download)
     - [3. Temp files are not deleted after download](#3-temp-files-are-not-deleted-after-download)
-    - [4. Others](#4-others)
+    - [4. Incomplete Downloads](#4-incomplete-downloads)
+    - [5. Others](#5-others)
   - [Acknowledgement](#acknowledgement)
   - [License](#license)
 
@@ -34,7 +35,7 @@ pip install BeautifulSoup4 zipfile shutil
 |-----------|-------------------------------------------------------------------------|------------------------------------------------------------------|
 | `dl.py`   | This file only has the function of downloading a single sticker pack    | Please copy the sticker pack URL `url` you want to download, and you can run `python dl.py <url>` in the same directory to download.                                  |
 | `bd.py`   | Download a single sticker or batch download all stickers from a creator | Please copy the sticker pack URL or creator URL you want to download, and enter `python bd.py` in the same directory and run it, paste the URL after the prompt. |
-| `bdp.py`  | Similar to `bd.py`                                                      | Paste the URLs of the texture packs you want to download and the author's URLs into `bdp.txt` in the same directory as the script, separated by carriage returns. See [here](./docs/bdp.txt) for an example. Then run `python bd.py` and the script will automatically download the textures in bulk.                                     |
+| `bdp.py`  | Similar to `bd.py`                                                      | Paste the URLs of the texture packs you want to download and the author's URLs into `bdp.txt` in the same directory as the script, separated by carriage returns. See [here](./docs/bdp.txt) for an example. Then run `python bdp.py` and the script will automatically download the textures in bulk.                                     |
 
 ## Errors and solutions
 
@@ -48,7 +49,11 @@ If the program runs an error and leaves an empty folder in the directory, please
 - If you use termux on your mobile phone and try to download in the storage directory, then you have stacked the buffs. The termux on some mobile phones intercepts the deletion of files in the storage directory and its subdirectories.
 - If you are using another device or the error does not occur in the storage directory, please check if you have permissions in the directory of this folder.
 
-### 4. Others
+### 4. Incomplete Downloads
+- When the number of emoji packs uploaded by the creator exceeds 36, only the emoji packs on a single page can be sniffed. Please use `bdp.py` to download, and paste all the URLs of the creator's emoji pack pages into `bdp.txt`.
+- This issue will be improved in the future.
+
+### 5. Others
 If you encounter other problems besides the above, please raise an issue and reproduce the problem record submitted. Thank you for your support of this project.
 
 ## Acknowledgement
