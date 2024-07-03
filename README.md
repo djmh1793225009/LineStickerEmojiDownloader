@@ -1,4 +1,4 @@
-[English README](./docs/README_EN.md) /[Telegram](https://t.me/Eschericia0)/[QQ](https://qm.qq.com/q/dCn4enLQly)
+[English README](./docs/README_EN.md) /[Telegram](https://t.me/yume_yuki)/[QQ](https://qm.qq.com/q/dCn4enLQly)
 
 # LINE贴图包和emoji下载器
 

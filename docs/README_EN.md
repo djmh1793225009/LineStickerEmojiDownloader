@@ -1,4 +1,4 @@
-[Chinese README](../README.md) /[Telegram](https://t.me/Eschericia0)/[QQ](https://qm.qq.com/q/dCn4enLQly)
+[Chinese README](../README.md) /[Telegram](https://t.me/yume_yuki)/[QQ](https://qm.qq.com/q/dCn4enLQly)
 
 # LINE Stickers and Emoji Downloader
 
