@@ -26,7 +26,7 @@
 
 你可以运行下面的命令以安装依赖库。
 ```bash
-pip install BeautifulSoup4 zipfile shutil
+pip install BeautifulSoup4 zipfile
 ```
 
 ## 使用方法
