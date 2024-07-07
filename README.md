@@ -51,7 +51,7 @@ pip install BeautifulSoup4 zipfile
 
 ### 4. 下载不完全
 - 当创作者的表情包上传数量超过了36个时，表情包仅能嗅探单页的表情包，请使用`bdp.py`下载，将作者的所有表情包页面url粘贴进`bdp.txt`。
-- 后续将改进此问题。
+- `v0.2.4`版本后已修复此问题。
 
 ### 5. 其他
 如果你遇到了除以上问题外的其他问题，请提起issues并列出详细复现问题过程记录并提交。感谢你对本项目的支持。
@@ -59,7 +59,7 @@ pip install BeautifulSoup4 zipfile
 ## 鸣谢
 
 感谢以下朋友及contributor：(排名不分先后)  
-[@kaixinol](https://github.com/kaixinol) | [@ZGQ Inc.](https://github.com/ZGQ-inc) | [@CPuddingOwO](https://github.com/CPuddingOwO) 
+[@CPuddingOwO](https://github.com/CPuddingOwO) | [@kaixinol](https://github.com/kaixinol) | [@ZGQ Inc.](https://github.com/ZGQ-inc) 
 
 ## 许可证
 

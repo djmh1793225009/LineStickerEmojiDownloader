@@ -51,7 +51,7 @@ If the program runs an error and leaves an empty folder in the directory, please
 
 ### 4. Incomplete Downloads
 - When the number of emoji packs uploaded by the creator exceeds 36, only the emoji packs on a single page can be sniffed. Please use `bdp.py` to download, and paste all the URLs of the creator's emoji pack pages into `bdp.txt`.
-- This issue will be improved in the future.
+- This issue has been fixed in version `v0.2.4` and later.
 
 ### 5. Others
 If you encounter other problems besides the above, please raise an issue and reproduce the problem record submitted. Thank you for your support of this project.
