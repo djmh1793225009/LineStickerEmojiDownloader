@@ -26,7 +26,7 @@ This project is prohibited for illegal use and sale. **If you like these sticker
 
 You can run the following command to install the dependent libraries.
 ```bash
-pip install BeautifulSoup4 zipfile shutil
+pip install BeautifulSoup4 zipfile django
 ```
 
 ## How to use
