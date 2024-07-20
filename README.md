@@ -26,7 +26,7 @@
 
 你可以运行下面的命令以安装依赖库。
 ```bash
-pip install BeautifulSoup4 zipfile
+pip install BeautifulSoup4 zipfile django
 ```
 
 ## 使用方法
