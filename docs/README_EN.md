@@ -10,13 +10,17 @@ This project is prohibited for illegal use and sale. **If you like these sticker
 - [LINE Stickers and Emoji Downloader](#line-stickers-and-emoji-downloader)
   - [Directory](#directory)
   - [Script Dependencies](#script-dependencies)
+  - [Project layout](#project-layout)
   - [How to use](#how-to-use)
+    - [Skipping already-downloaded packs](#skipping-already-downloaded-packs)
+    - [Concurrency and progress](#concurrency-and-progress)
   - [Errors and solutions](#errors-and-solutions)
     - [1. Unable to get the sticker pack name](#1-unable-to-get-the-sticker-pack-name)
     - [2. Unable to download](#2-unable-to-download)
     - [3. Temp files are not deleted after download](#3-temp-files-are-not-deleted-after-download)
     - [4. Incomplete Downloads](#4-incomplete-downloads)
-    - [5. Others](#5-others)
+    - [5. Cleanup of thumbnail files fails (`[WinError 5]` / `[WinError 32]`)](#5-cleanup-of-thumbnail-files-fails-winerror-5--winerror-32)
+    - [6. Others](#6-others)
   - [Acknowledgement](#acknowledgement)
   - [License](#license)
 
@@ -26,34 +30,108 @@ This project is prohibited for illegal use and sale. **If you like these sticker
 
 You can run the following command to install the dependent libraries.
 ```bash
-pip install BeautifulSoup4 zipfile django
+pip install requests beautifulsoup4
+```
+
+> `zipfile`, `tempfile` and friends ship with python as standard library modules — do not install them with pip.
+
+## Project layout
+
+Since `v0.3.0` the three near-identical scripts have been merged into a single package, with `main.py` in the repository root as the only entry point.
+
+```
+main.py            # entry point for every use case
+line_dl/
+  cli.py           # command line argument parsing
+  fetch.py         # shared HTTP session (timeout, retries, User-Agent)
+  naming.py        # filename sanitisation
+  pack.py          # download and clean up a single sticker / emoji pack
+  author.py        # creator page pagination and link sniffing
+  progress.py      # progress bar for concurrent downloads
+docs/bdp.txt       # sample URL list for batch downloads
 ```
 
 ## How to use
 
-| File name | Function                                                                | How to use                                                       |
-|-----------|-------------------------------------------------------------------------|------------------------------------------------------------------|
-| `dl.py`   | This file only has the function of downloading a single sticker pack    | Please copy the sticker pack URL `url` you want to download, and you can run `python dl.py <url>` in the same directory to download.                                  |
-| `bd.py`   | Download a single sticker or batch download all stickers from a creator | Please copy the sticker pack URL or creator URL you want to download, and enter `python bd.py` in the same directory and run it, paste the URL after the prompt. |
-| `bdp.py`  | Similar to `bd.py`                                                      | Paste the URLs of the texture packs you want to download and the author's URLs into `bdp.txt` in the same directory as the script, separated by carriage returns. See [here](./docs/bdp.txt) for an example. Then run `python bdp.py` and the script will automatically download the textures in bulk.                                     |
+Run `main.py` from the repository root. The three forms below replace the old `dl.py`, `bd.py` and `bdp.py`.
+
+| Use case | Command | Notes |
+|----------|---------|-------|
+| Download given links | `python main.py <url> [<url> ...]` | Accepts multiple links at once — sticker packs, emoji packs and creator pages are all supported. |
+| Interactive input | `python main.py` | Run it with no arguments and paste the link at the prompt. |
+| Batch from a file | `python main.py -f bdp.txt` | One link per line; lines starting with `#` are treated as comments. See [here](./bdp.txt) for an example. |
+
+Optional arguments:
+
+| Argument | Description |
+|----------|-------------|
+| `-o DIR` / `--output DIR` | Output directory, defaults to `output`. Use `-o .` to download into the current directory. |
+| `-f FILE` / `--file FILE` | Read a list of links from a text file; can be combined with links given directly. |
+| `-j N` / `--jobs N` | Number of concurrent downloads, defaults to `4`, capped at `16`. Use `-j 1` for sequential downloads. |
+| `--overwrite` | Re-download packs that were already downloaded (skipped by default). |
+| `--proxy URL` | Use a proxy, e.g. `--proxy http://127.0.0.1:7897`. |
+| `-h` / `--help` | Show the full help text. |
+
+### Skipping already-downloaded packs
+
+The script keeps a `.downloaded.json` file in the output directory mapping "pack ID → filename". Packs that were already downloaded are skipped on subsequent runs — **no re-download and no wasted requests** — so if you interrupt a creator-page download with `Ctrl+C`, simply re-running it picks up where it left off.
+
+- If you delete one of the zips by hand, only that one gets re-fetched.
+- Pass `--overwrite` to force a re-download; it overwrites the original file rather than creating a copy.
+- Deleting `.downloaded.json` makes every pack look un-downloaded again.
+
+### Concurrency and progress
+
+Multiple packs are downloaded 4-at-a-time by default, with a progress bar:
+
+```
+[==============--------------] 3/6 (50%)  成功 2  跳过 1
+```
+
+For large jobs (a creator with 150+ packs) the default is fine, and `-j 8` works well too — but avoid going much higher, both to stay under LINE's rate limits and to be polite. The progress bar is suppressed when output is redirected to a file, leaving only the log lines.
+
+Examples:
+
+```bash
+python main.py https://store.line.me/stickershop/product/1419581/zh-Hant
+python main.py https://store.line.me/stickershop/author/831836/zh-Hant -o ./stickers
+python main.py -f docs/bdp.txt
+```
 
 ## Errors and solutions
 
 ### 1. Unable to get the sticker pack name
-If the downloaded file is named `unknown_emoji_name`, please check your network environment and whether your network IP is outside the region where LINE provides services.
+Since `v0.3.0`, when the name cannot be scraped the pack ID is used as the filename instead (e.g. `1419581.zip`), so packs no longer share a single `unknown_emoji_name` and overwrite each other. If you want the proper names, please check your network environment and whether your network IP is outside the region where LINE provides services.
 
 ### 2. Unable to download
-If the program runs an error and leaves an empty folder in the directory, please raise an issue and try to reproduce the content. The problem has occurred before, but the problem was solved and forgotten how to reproduce the problem.
+Since `v0.3.0`, downloads are written to a `.part` file and verified to be a real zip before being renamed, so a failure no longer leaves a corrupted zip or an empty folder behind. If it still fails, please raise an issue and include the full error output.
 
 ### 3. Temp files are not deleted after download
+Since `v0.3.0` the temporary file used for cleaning is created next to the target file and removed in a `finally` block, so it should not be left behind.
 - If you use termux on your mobile phone and try to download in the storage directory, then you have stacked the buffs. The termux on some mobile phones intercepts the deletion of files in the storage directory and its subdirectories.
 - If you are using another device or the error does not occur in the storage directory, please check if you have permissions in the directory of this folder.
 
 ### 4. Incomplete Downloads
-- When the number of emoji packs uploaded by the creator exceeds 36, only the emoji packs on a single page can be sniffed. Please use `bdp.py` to download, and paste all the URLs of the creator's emoji pack pages into `bdp.txt`.
+- When a creator has uploaded more than 36 packs, the script now pages through the creator's listing automatically — no need to copy each page URL by hand.
 - This issue has been fixed in version `v0.2.4` and later.
 
-### 5. Others
+### 5. Cleanup of thumbnail files fails (`[WinError 5]` / `[WinError 32]`)
+
+If you see a line like
+```
+清理 key 缩略图失败（原始文件已保留）: [WinError 5] 拒绝访问。...
+```
+
+This is **not a download failure**. The sticker pack's zip has already been downloaded and saved intact; the script merely failed to repack it after removing the `key` thumbnails (`key.png` or `001_key.png`) — `os.replace` was denied by the system. The archive is still fully usable, it just keeps some extra thumbnails inside.
+
+- It happens intermittently on Windows and is suspected to relate to freshly-written files being held open (antivirus scanning, OneDrive sync, indexing service, etc.). The exact cause has not been identified.
+- If you can reproduce it consistently, please open an issue and include:
+  - the full error output,
+  - which kind of pack it happened on (sticker / emoji),
+  - your Windows version and any antivirus / sync software in use.
+  A reproducible pattern will help fix the root cause.
+
+### 6. Others
 If you encounter other problems besides the above, please raise an issue and reproduce the problem record submitted. Thank you for your support of this project.
 
 ## Acknowledgement

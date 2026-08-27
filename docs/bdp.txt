@@ -1,3 +1,5 @@
+# 每行一个链接，# 开头的行会被忽略
+# 用法: python main.py -f docs/bdp.txt
 https://store.line.me/stickershop/product/23201875/zh-Hant
 https://store.line.me/stickershop/product/1419581/zh-Hant
 https://store.line.me/stickershop/product/1374816/zh-Hant
