@@ -1,0 +1,11 @@
+[project]
+name = "LineStickerEmojiDownloader"
+version = "0.2.4"
+description = "这个项目可以用来下载LINE上的贴纸和emoji，同时支持动图和静态图，以及批量下载的操作。本项目禁止用于非法用途，禁止贩卖。如果喜欢这些stickers，请支持正版line贴纸 "
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "django>=6.0.7",
+    "requests>=2.34.2",
+]
